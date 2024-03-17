@@ -6,6 +6,3 @@
 
 import express from 'express';
 import dotenv from 'dotenv';
-import LOG_STYLES from './utils/chalkStyles';
-
-console.log('Starting API...');
