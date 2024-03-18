@@ -6,7 +6,7 @@ const getEnvPath = (): string => {
      * @const
      * @type {string}
      */
-    const __dirname: string = dirname(process.argv[1]);
+    const __dirname: string = dirname(process.cwd());
 
     /**
      * Path of the environment variables file.

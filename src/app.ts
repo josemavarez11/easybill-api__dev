@@ -4,16 +4,23 @@
  * @author Uldren Gedde
  */
 
-import express from 'express';
+import ExpressAdapter from './adapters/expressAdapter';
+import corsMiddleware from './middlewares/corsMiddleware';
+import reqReceivedMiddleware from './middlewares/reqReceivedMiddleware';
+import indexRouter from './routing/indexRouter';
+import mongoConnection from './db/mongoConnection';
 import _dotenv from 'dotenv';
 
-const app = express();
-const PORT = process.env.PORT || 8080;
 
-app.use('/api', (_req, res) => {
-    res.send('Hello, World!');
-})
+const adapter = new ExpressAdapter({ portDefault: 4000 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT} in http://localhost:${PORT}`);
-})
+adapter.middlewareJSON();
+adapter.middlewareURLEncoded();
+adapter.middlewarePersonalized({ middleware: corsMiddleware })
+adapter.middlewarePersonalized({ middleware: reqReceivedMiddleware });
+mongoConnection();
+adapter.setRouteApp({ route: '/api', callbackRouter: indexRouter() });
+
+adapter.startServer(() => {
+    console.log(`Server started at http://localhost:${adapter.port}`);
+});
