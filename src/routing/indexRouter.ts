@@ -23,6 +23,12 @@ const indexRouter = () => {
         callbackRouter: loginRouter()
     });
 
+    adapter.setRouter({
+        route: '/users',
+        router: iRouter,
+        callbackRouter: loginRouter()
+    });
+
     return iRouter;
 }
 

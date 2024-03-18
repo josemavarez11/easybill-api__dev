@@ -14,6 +14,7 @@ const loginRouter = () => {
         });
     }
 
+
     adapter.setRouteRouter({
         method: 'get',
         route: '/login',

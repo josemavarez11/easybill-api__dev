@@ -5,20 +5,21 @@
  */
 
 import ExpressAdapter from './adapters/expressAdapter';
+
 import corsMiddleware from './middlewares/corsMiddleware';
 import reqReceivedMiddleware from './middlewares/reqReceivedMiddleware';
 import indexRouter from './routing/indexRouter';
-import mongoConnection from './db/mongoConnection';
-import _dotenv from 'dotenv';
+import _mongoConnection from './db/mongoConnection';
 
 
-const adapter = new ExpressAdapter({ portDefault: 4000 });
+const adapter = new ExpressAdapter({ portDefault: 3000 });
 
 adapter.middlewareJSON();
 adapter.middlewareURLEncoded();
 adapter.middlewarePersonalized({ middleware: corsMiddleware })
 adapter.middlewarePersonalized({ middleware: reqReceivedMiddleware });
-mongoConnection();
+
+
 adapter.setRouteApp({ route: '/api', callbackRouter: indexRouter() });
 
 adapter.startServer(() => {

@@ -8,6 +8,13 @@ import {
     RequestHandler,
     ErrorRequestHandler
 } from 'express';
+import dotenv from 'dotenv';
+import getEnvPath from '../utils/getEnvPath';
+
+dotenv.config({
+    path: getEnvPath()
+});
+
 
 /**
  * Adapter class for Express server.
