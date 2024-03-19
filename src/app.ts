@@ -7,7 +7,7 @@
 import ExpressAdapter from './adapters/expressAdapter';
 import corsMiddleware from './middlewares/corsMiddleware';
 import reqReceivedMiddleware from './middlewares/reqReceivedMiddleware';
-import indexRouter from './routing/indexRouter';
+import indexRouter from './routes/indexRouter';
 import connectionDB from './db/mongoConnection';
 
 

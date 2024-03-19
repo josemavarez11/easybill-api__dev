@@ -9,16 +9,16 @@ import { modelOptions, prop } from "@typegoose/typegoose";
 })
 class Address {
 
-    @prop({ trim: true, type: String })
+    @prop({ required: true, trim: true, type: String })
     street?: string;
 
-    @prop({ trim: true, type: String })
+    @prop({ required: true, trim: true, type: String })
     city?: string;
 
-    @prop({ trim: true, type: String })
+    @prop({ required: true, trim: true, type: String })
     state?: string;
 
-    @prop({ trim: true, type: String })
+    @prop({ required: true, trim: true, type: String })
     country?: string;
 }
 
