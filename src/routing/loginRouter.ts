@@ -2,6 +2,7 @@ import ExpressAdapter, {
     Response,
     Request
 } from "../adapters/expressAdapter";
+import TypeDocumentModel from "../models/typeDocumentModel";
 
 const adapter = new ExpressAdapter();
 
@@ -9,9 +10,12 @@ const loginRouter = () => {
     const router = adapter.createRouter();
 
     const probe = (_req: Request, res: Response) => {
-        res.json({
-            message: 'Login route'
-        });
+        const typeDocument = new TypeDocumentModel({
+            description: 'Venezolano',
+            type: 'V'
+        })
+
+        res.json({ result: typeDocument })
     }
 
 

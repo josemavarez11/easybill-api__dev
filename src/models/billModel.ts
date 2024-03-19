@@ -15,19 +15,19 @@ import { Person } from "./personModel";
 })
 export class Bill {
 
-    @prop({ required: true, unique: true })
+    @prop({ required: true, unique: true, type: Number })
     public code?: number;
 
-    @prop({ required: false, default: 0 })
+    @prop({ required: false, default: 0, type: Number })
     totalAmount?: number;
 
-    @prop({ required: true, default: false })
+    @prop({ required: true, default: false, type: Number })
     payed?: boolean;
 
-    @prop({ required: true, ref: () => Person })
+    @prop({ required: true, ref: () => Person, type: () => Person })
     customer?: Ref<Person>;
 
-    @prop({ required: true, ref: () => User })
+    @prop({ required: true, ref: () => User, type: () => User })
     cashier?: Ref<User>;
 
 }
