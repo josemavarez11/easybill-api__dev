@@ -1,4 +1,3 @@
-
 const skuGenerator = ({ productId, productName, category }: { productId: string, productName: string, category: string }) => {
     const random = Math.floor(Math.random() * 10000).toString();
 
@@ -6,6 +5,5 @@ const skuGenerator = ({ productId, productName, category }: { productId: string,
 
     return sku.toLocaleLowerCase();
 }
-
 
 export default skuGenerator;
