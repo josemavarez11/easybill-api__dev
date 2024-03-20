@@ -19,7 +19,7 @@ export class Bill {
     public code?: number;
 
     @prop({ required: false, default: 0, type: Number })
-    totalAmount?: number;
+    total?: number;
 
     @prop({ required: true, default: false, type: Number })
     payed?: boolean;

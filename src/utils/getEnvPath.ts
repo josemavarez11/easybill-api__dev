@@ -1,4 +1,4 @@
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 
 const getEnvPath = (): string => {
     /**
@@ -6,14 +6,14 @@ const getEnvPath = (): string => {
      * @const
      * @type {string}
      */
-    const __dirname: string = process.cwd();
+    const __dirname: string = dirname(process.argv[1]);
 
     /**
      * Path of the environment variables file.
      * @const
      * @type {string}
      */
-    const envPath: string = join(__dirname, 'src', '.env');
+    const envPath: string = join(dirname(__dirname), '.env');
     return envPath;
 }
 

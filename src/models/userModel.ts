@@ -1,7 +1,6 @@
 import { prop, getModelForClass, Ref } from '@typegoose/typegoose'
 import { Person } from './personModel';
 
-
 export class User {
 
     @prop({ required: true, type: String })
