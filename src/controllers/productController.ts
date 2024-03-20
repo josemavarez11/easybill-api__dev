@@ -31,7 +31,7 @@ class ProductController {
         }
     }
 
-    static async getProductByDescription(req: Request, res: Response){
+    static async getProductsByDescription(req: Request, res: Response){
         const { description } = req.body;
         if (!description) return res.status(400).json({ message: messages.error.MissingParameters });
 
