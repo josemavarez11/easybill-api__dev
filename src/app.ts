@@ -4,5 +4,27 @@
  * @author Uldren Gedde
  */
 
-import express from 'express';
-import dotenv from 'dotenv';
+import ExpressAdapter from './adapters/expressAdapter';
+import corsMiddleware from './middlewares/corsMiddleware';
+import reqReceivedMiddleware from './middlewares/reqReceivedMiddleware';
+import indexRouter from './routes/indexRouter';
+import connectionDB from './db/mongoConnection';
+
+
+const adapter = new ExpressAdapter({ portDefault: 3000 });
+
+//! IIFE to connect to the database
+(async () => {
+    await connectionDB();
+})();
+
+adapter.middlewareJSON();
+adapter.middlewareURLEncoded();
+adapter.middlewarePersonalized({ middleware: corsMiddleware })
+adapter.middlewarePersonalized({ middleware: reqReceivedMiddleware });
+
+adapter.setRouteApp({ route: '/api', callbackRouter: indexRouter() });
+
+adapter.startServer(() => {
+    console.log(`Server started at http://localhost:${adapter.port}`);
+});
