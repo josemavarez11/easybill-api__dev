@@ -6,8 +6,6 @@ export class Payment {
     @prop({ required: true, type: Number })
     amount?: number;
 
-    // currency pero no sé como manejarlo
-
     @prop({ required: true, ref: () => Bill, type: () => Bill })
     bill?: Ref<Bill>;
 
