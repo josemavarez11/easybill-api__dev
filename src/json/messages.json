@@ -3,12 +3,26 @@
         "ConnectionDBError": {
             "description": "Error de conexión a la base de datos",
             "code": "1"
+        },
+        "MissingParameters": {
+            "description": "Missing required information",
+            "code": "2"
+        },
+        "ElementNotFound": {
+            "description": "Element not found in db",
+            "code": "3"
         }
     },
     "success": {
         "RequestSuccess": {
             "description": "La solicitud al EndPoint fue exitosa",
             "code": "0"
+        },
+        "ElementDeleted": {
+            "description": "Element deleted successfully from db"
+        },
+        "ElementUpdated": {
+            "description": "Element updated successfully in db"
         }
     }
 }

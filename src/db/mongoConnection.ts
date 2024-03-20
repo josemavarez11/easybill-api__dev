@@ -10,10 +10,10 @@ const connectionDB = async (): Promise<Object> => {
         const mongoURI = 'mongodb+srv://uldrenmiguel33:d4GbBq7YvIyCqcW4@mycluster.tggajug.mongodb.net/easybill';
 
         await mongoose.connect(mongoURI);
-        console.log(`Conexión a la base de datos establecida`);
+        console.log(`Connected to MongoDB! 🚀`);
         return { success: true }
     } catch (e: any) {
-        console.log(`Error al conectar con MongoDB ${e.message}`);
+        console.error(`Error connecting to MongoDB: ${e.message}`);
         return { error: messages.error.ConnectionDBError.description }
     }
 }
