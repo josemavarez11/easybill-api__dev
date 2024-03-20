@@ -1,14 +1,32 @@
 {
     "error": {
         "ConnectionDBError": {
-            "description": "Error de conexión a la base de datos",
+            "description": "Data base connection error",
             "code": "1"
+        },
+        "MissingParameters": {
+            "description": "Missing required information",
+            "code": "2"
+        },
+        "ElementNotFound": {
+            "description": "Element not found in db",
+            "code": "3"
+        },
+        "MongoURIUndefined": {
+            "description": "Mongo URI is undefined",
+            "code": "4"
         }
     },
     "success": {
         "RequestSuccess": {
-            "description": "La solicitud al EndPoint fue exitosa",
+            "description": "Endpoint request successfull",
             "code": "0"
+        },
+        "ElementDeleted": {
+            "description": "Element deleted successfully from db"
+        },
+        "ElementUpdated": {
+            "description": "Element updated successfully in db"
         }
     }
 }

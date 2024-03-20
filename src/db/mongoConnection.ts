@@ -1,5 +1,9 @@
 import mongoose from 'mongoose';
 import messages from '../json/messages.json';
+import dotenv from 'dotenv';
+import getEnvPath from '../utils/getEnvPath';
+
+dotenv.config({ path: getEnvPath() });
 
 /**
  * Establishes a connection to the MongoDB database.
@@ -7,13 +11,13 @@ import messages from '../json/messages.json';
  */
 const connectionDB = async (): Promise<Object> => {
     try {
-        const mongoURI = 'mongodb+srv://uldrenmiguel33:d4GbBq7YvIyCqcW4@mycluster.tggajug.mongodb.net/easybill';
+        if (!process.env.MONGODB_URI) throw new Error(messages.error.MongoURIUndefined.description);
 
-        await mongoose.connect(mongoURI);
-        console.log(`Conexión a la base de datos establecida`);
+        await mongoose.connect(process.env.MONGODB_URI);
+        console.log(`Connected to MongoDB! 🚀`);
         return { success: true }
     } catch (e: any) {
-        console.log(`Error al conectar con MongoDB ${e.message}`);
+        console.error(`Error connecting to MongoDB: ${e.message}`);
         return { error: messages.error.ConnectionDBError.description }
     }
 }

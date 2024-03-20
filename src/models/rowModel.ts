@@ -8,6 +8,9 @@ class Row {
 
     @prop({ required: true, ref: () => Product, type: () => Product })
     product?: Ref<Product>;
+
+    @prop({ required: true, type: Number, default: 1 })
+    amount?: number;
 }
 
 const RowModel = getModelForClass(Row);

@@ -17,10 +17,7 @@ export class Product {
     @prop({ required: false, type: String })
     urlImage?: string;
 
-    @prop({ required: true, type: String })
-    category?: string;
-
-    @prop({ required: true, ref: () => TypeProduct, type: () => TypeProduct })
+    @prop({ required: false, ref: () => TypeProduct, type: () => TypeProduct })
     type_product?: Ref<TypeProduct>;
 }
 
