@@ -1,35 +1,26 @@
 import ExpressAdapter, {
     Response,
-    Request
+    Request,
+    NextFunction
 } from "../adapters/expressAdapter";
-import PersonModel from "../models/personModel";
 
 const adapter = new ExpressAdapter();
 
 const loginRouter = () => {
     const router = adapter.createRouter();
 
-    const probe = async (_req: Request, res: Response) => {
+    const probe = async (_req: Request, _res: Response, next: NextFunction) => {
+        console.log("Paso por el middleware de login");
+        next();
+    }
 
-        const person = new PersonModel({
-            address: {
-                city: 'Maracaibo',
-                country: 'Venezuela',
-                state: 'Zulia',
-                street: 'Av Cecilio Acosta'
-            },
-            email: 'jose@jose.com',
-            fullname: 'Jose Mavarez',
-            document: '30783809',
-            type_document: '65f9a57a37ca727ace69f4c9',
-            type_person: '65f9abc9411091ae13ce2592'
-        })
+    const probe2 = async (_req: Request, _res: Response, next: NextFunction) => {
+        console.log("Paso por el middleware de login 2");
+        next();
+    }
 
-        await person.save();
-
-        res.json({
-            typePerson: person
-        })
+    const probe3 = async (_req: Request, res: Response) => {
+        res.send("<h1>Hello from login<h1>");
     }
 
 
@@ -37,7 +28,7 @@ const loginRouter = () => {
         method: 'get',
         route: '/login',
         router,
-        callback: probe
+        callback: [probe, probe2, probe3]
     });
 
     return router;

@@ -76,8 +76,8 @@ class ExpressAdapter {
      * @param {string} options.route - The route path.
      * @param {express.RequestHandler} options.callback - The callback function to handle the route.
      */
-    setRouteRouter = ({ method, route, router, callback }: { method: Methods, router: express.Router, route: string, callback: express.RequestHandler }) => {
-        router[method](route, callback);
+    setRouteRouter = ({ method, route, router, callback }: { method: Methods, router: express.Router, route: string, callback: express.RequestHandler[] }) => {
+        router[method](route, ...callback);
     }
 
     /**
