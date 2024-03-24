@@ -35,6 +35,10 @@
         "RequestDBError": {
             "description": "Error in request to db",
             "code": "1"
+        },
+        "UserExists": {
+            "description": "User already exists",
+            "code": "1"
         }
     },
     "success": {
@@ -56,6 +60,10 @@
         },
         "LogoutSuccessfull": {
             "description": "User logout successfully",
+            "code": "0"
+        },
+        "LoginSuccessfull": {
+            "description": "User logged in successfully",
             "code": "0"
         }
     },

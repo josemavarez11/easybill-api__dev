@@ -11,9 +11,11 @@ dotenv.config({ path: getEnvPath() });
 const salt = process.env.SALT ?? 11;
 const encrypt = new Encrypt(salt);
 
-@pre('save', async function (next) {
-    const { hash } = await encrypt.encrypt((this as User).password as string);
-    (this as User).password = hash;
+@pre<User>('save', async function (next) {
+    if (!this.isModified("password")) return next();
+
+    const { hash } = await encrypt.encrypt(this.password as string);
+    this.password = hash;
     next();
 })
 export class User {
@@ -47,7 +49,7 @@ export class User {
             return { user };
 
         } catch (e: any) {
-            console.error('Error al hacer la consulta', e.message);
+            console.error('Error making query', e.message);
             return { error: message.error.RequestDBError }
         }
     }

@@ -23,7 +23,6 @@ const encrypt = new Encrypt(salt);
 
 class AuthController {
 
-    //Middleware Login
     middlewareLogin = async (req: Request, res: Response, next: NextFunction) => {
         const { email } = req.body;
 
@@ -41,15 +40,17 @@ class AuthController {
 
     }
 
-
     static login = async (req: Request, res: Response) => {
         const { email, password } = req.body;
 
         const { user } = await UserModel.findUserByEmail(email);
         const isValidPassword = await encrypt.dencrypt(password, user?.password || '');
 
-        if (!user || !isValidPassword)
-            res.status(400).json({ error: message.error.InvalidCredentials });
+        if (!user || !isValidPassword){
+            return  res.status(400).json({ 
+                error: message.error.InvalidCredentials 
+            });
+        }
 
         const token = jwt.sign(
             { userId: user?._id },
@@ -58,23 +59,31 @@ class AuthController {
         );
 
         console.log(`Se ha loguedo correctamente ${user?.person?.email}`);
-        return res.status(200).json({ token })
+        return res.status(200).json({ 
+            message: message.success.LoginSuccessfull,
+            token 
+        });
     }
 
     //Register
     register = async (req: Request, res: Response) => {
-        const { fullname, address, document, idTypeDocument, email, password, url_image } = req.body;
+        const { fullname, email, address, document, idTypeDocument, password, url_image } = req.body;
+        
+        if(!fullname || !email || !address || !document || !idTypeDocument || !password ){
+            return res.status(400).json({ error: message.error.MissingParameters });
+        }
 
         try {
-            const existsPerson = await PersonModel.findOne({ document })
+            //validar si el usuario existe y retornar o continuar con el registro.
 
-            if (!existsPerson) {
-                await this.insertPerson({ fullname, address, document, idTypeDocument, email })
-                await this.inserUser({ password, url_image, email })
+            const existsPerson = await PersonModel.find({ document });
+            if(existsPerson.length > 0) {
+                await this.insertPerson({ fullname, address, document, idTypeDocument, email });
+                await this.inserUser({ password, url_image, email });
 
-                return res.status(200).json({ message: `${message.success.RegisterSuccessfull}` })
+                return res.status(200).json({ message: `${message.success.RegisterSuccessfull}` });
             }
-
+            
             const { person } = await PersonModel.findPersonByDocument(document);
             const isCustomer = person?.type_person?.includes({ description: TYPE_PERSON.CUSTOMER });
 
@@ -94,18 +103,11 @@ class AuthController {
 
     }
 
-
-    //Logout
     static logout = async (_req: Request, res: Response) => {
         res.clearCookie('token')
             .status(200)
             .json({ message: message.success.LogoutSuccessfull });
     }
-
-    //!Forgot Password
-    /*static forgotPassword = async (req: Request, res: Response) => {
-
-    }*/
 
     private insertPerson = async ({ address, document, email, fullname, idTypeDocument }:
         { address: object, document: string, email: string, fullname: string, idTypeDocument: string }
