@@ -11,7 +11,7 @@ dotenv.config({ path: getEnvPath() });
  */
 const connectionDB = async (): Promise<Object> => {
     try {
-        if (!process.env.MONGODB_URI) throw new Error(messages.error.MongoURIUndefined.description);
+       if (!process.env.MONGODB_URI) throw new Error(messages.error.MongoURIUndefined.description);
 
         await mongoose.connect(process.env.MONGODB_URI);
         console.log(`Connected to MongoDB! 🚀`);
