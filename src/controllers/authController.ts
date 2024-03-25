@@ -52,14 +52,12 @@ class AuthController {
             });
         }
 
-        if (!user?.status) return res.status(400).json({ error: message.error.UserNotActive });
-
         const token = jwt.sign(
             { userId: user?._id },
             process.env.JWT_SECRET as jwt.Secret,
             { expiresIn: '30m' }
         );
-        
+
         return res.status(200).json({
             message: message.success.LoginSuccessfull,
             token
