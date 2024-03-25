@@ -26,7 +26,7 @@ const authRouter = () => {
         method: 'post',
         route: '/login',
         router,
-        callback: [authController.middlewareLogin, authController.login]
+        callback: [authController.login]
     });
 
     adapter.setRouteRouter({
@@ -35,7 +35,6 @@ const authRouter = () => {
         router,
         callback: [authController.register]
     });
-
 
     return router;
 }

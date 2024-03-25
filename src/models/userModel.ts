@@ -29,14 +29,13 @@ export class User extends Document {
     @prop({ default: true, type: Boolean })
     status?: boolean;
 
-    @prop({ lowercase: true, type: String })
+    @prop({ required: false, default: null, lowercase: true, type: String })
     url_image?: string;
 
     @prop({ required: true, unique: true, ref: () => Person, type: () => Person })
     person?: Ref<Person>;
 
     static async findUserByEmailOrDocument(this: ReturnModelType<typeof User>, email?: string, document?: string) {
-
         try {
             const person = await PersonModel.findOne({ email }).select('_id');
 
@@ -50,7 +49,6 @@ export class User extends Document {
 
                 return { user }
             }
-
             return { user };
         } catch (e: any) {
             console.error('Error making query', e.message);

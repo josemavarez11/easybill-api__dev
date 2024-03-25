@@ -7,19 +7,13 @@ import message from "../json/messages.json";
 class BillController {
 
     static createBill = async (req: Request, res: Response) => {
-
         const { customer, cashier } = req.body;
-
         if (!customer || !cashier) return res.status(400).send(message.error.MissingParameters);
 
         try {
-            const bill = await BillModel.create({
-                customer,
-                cashier
-            });
+            const bill = await BillModel.create({ customer, cashier });
 
             const b = await bill.save();
-
             if (!b) return res.status(400).json({ error: message.error.RequestDBError })
 
             return res.status(201).json({ idBill: b?._id })
@@ -34,8 +28,7 @@ class BillController {
         if (!code) return res.status(400).send(message.error.MissingParameters);
 
         try {
-            if (code.match(/^[0-9]+$/))
-                return res.status(400).send(message.error.InvalidParameters);
+            if (code.match(/^[0-9]+$/)) return res.status(400).send(message.error.InvalidParameters);
 
             const bill = await BillModel.findBillByCode(code)
             if (!bill) return res.status(404).send(message.error.ElementNotFound);
@@ -59,8 +52,6 @@ class BillController {
             return res.status(400).json({ error: message.error.RequestDBError });
         }
     }
-
-
 }
 
 export default BillController;

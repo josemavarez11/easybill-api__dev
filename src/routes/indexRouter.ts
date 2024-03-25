@@ -12,7 +12,6 @@ const indexRouter = () => {
     adapter.middlewarePersonalized({
         router: iRouter,
         middleware: (_req: Request, _res: Response, next) => {
-            console.log('Middleware from indexRouter');
             next();
         }
     })
