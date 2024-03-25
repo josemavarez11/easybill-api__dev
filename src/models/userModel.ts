@@ -1,6 +1,8 @@
 import { pre, prop, getModelForClass, Ref, ReturnModelType } from '@typegoose/typegoose'
-import { Person } from './personModel';
+import PersonModel, { Person } from './personModel';
 import { IUser } from '../interfaces/IUser';
+import { Document } from 'mongoose';
+
 import message from '../json/messages.json'
 import Encrypt from '../adapters/bcryptAdapter';
 import dotenv from "dotenv";
@@ -8,15 +10,18 @@ import getEnvPath from '../utils/getEnvPath';
 
 dotenv.config({ path: getEnvPath() });
 
-const salt = process.env.SALT ?? 11;
+const salt = process.env.SALT ?? "11";
 const encrypt = new Encrypt(salt);
 
-@pre('save', async function (next) {
+@pre<User>('save', async function (next) {
+    if (!(this as User).isModified('password')) return next();
+
     const { hash } = await encrypt.encrypt((this as User).password as string);
+    console.log('Aqui middlware pre save', hash);
     (this as User).password = hash;
     next();
 })
-export class User {
+export class User extends Document {
 
     @prop({ required: true, type: String })
     password?: string;
@@ -24,28 +29,29 @@ export class User {
     @prop({ default: true, type: Boolean })
     status?: boolean;
 
-    @prop({ lowercase: true, unique: true, type: String })
+    @prop({ lowercase: true, type: String })
     url_image?: string;
 
     @prop({ required: true, unique: true, ref: () => Person, type: () => Person })
     person?: Ref<Person>;
 
-    static async findUserByEmail(this: ReturnModelType<typeof User>, email: string) {
+    static async findUserByEmailOrDocument(this: ReturnModelType<typeof User>, email?: string, document?: string) {
 
         try {
-            const user = await this.findOne({ email })
-                .populate('person', 'email'
-                    + ' -fullname'
-                    + ' -address'
-                    + ' -document'
-                    + ' -type_document'
-                    + ' -type_person'
-                    + ' -_id'
-                )
-                .select('person.email') as IUser;
+            const person = await PersonModel.findOne({ email }).select('_id');
+
+            const user = await this.findOne({ person: person?._id })
+                .populate('person', 'email -_id') as IUser;
+
+            if (!user) {
+                const person = await PersonModel.findOne({ document }).select('_id');
+                const user = await this.findOne({ person: person?._id })
+                    .populate('person', 'email -_id') as IUser;
+
+                return { user }
+            }
 
             return { user };
-
         } catch (e: any) {
             console.error('Error al hacer la consulta', e.message);
             return { error: message.error.RequestDBError }

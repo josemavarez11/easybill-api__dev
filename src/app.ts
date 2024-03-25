@@ -10,7 +10,7 @@ import reqReceivedMiddleware from './middlewares/reqReceivedMiddleware';
 import indexRouter from './routes/indexRouter';
 import connectionDB from './db/mongoConnection';
 
-const adapter = new ExpressAdapter({ portDefault: 3000 });
+const adapter = new ExpressAdapter({ portDefault: 8080 });
 
 //! IIFE to connect to the database
 (async () => {

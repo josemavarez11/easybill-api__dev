@@ -2,7 +2,7 @@ import ExpressAdapter, {
     Response,
     Request
 } from "../adapters/expressAdapter";
-import loginRouter from "./loginRouter";
+import authRouter from "./authRouter";
 
 const adapter = new ExpressAdapter();
 
@@ -20,13 +20,7 @@ const indexRouter = () => {
     adapter.setRouter({
         route: '/auth',
         router: iRouter,
-        callbackRouter: loginRouter()
-    });
-
-    adapter.setRouter({
-        route: '/users',
-        router: iRouter,
-        callbackRouter: loginRouter()
+        callbackRouter: authRouter()
     });
 
     return iRouter;

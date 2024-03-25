@@ -1,15 +1,15 @@
 import {
     Cryptography
 } from '../interfaces/encrypter';
-import bcrypt from 'bcrypt';
+import { hash, compare as comapareBcrypt } from 'bcrypt';
 import message from "../json/messages.json";
 
 
 class Encrypt implements Cryptography {
     private readonly salt: number | string;
 
-    constructor(salt: number | string) {
-        this.salt = salt;
+    constructor(salt: string) {
+        this.salt = parseInt(salt);
     }
 
     /**
@@ -19,8 +19,9 @@ class Encrypt implements Cryptography {
      */
     encrypt = async (value: string) => {
         try {
-            const hash = await bcrypt.hash(value, this.salt);
-            return { hash };
+            const hashValue = await hash(value, this.salt);
+
+            return { hash: hashValue };
         } catch (e: any) {
             return { error: message.error.EncryptError }
         }
@@ -32,9 +33,9 @@ class Encrypt implements Cryptography {
      * @param compary - The hash to be compared.
      * @returns An object containing the result of the comparison or an error message.
      */
-    dencrypt = async (value: string, compary: string) => {
+    compare = async (value: string, compary: string) => {
         try {
-            const isValid = await bcrypt.compare(value, compary);
+            const isValid = await comapareBcrypt(value, compary);
             return { isValid }
         } catch (e: any) {
             return { error: message.error.CompareEncryptionError }
