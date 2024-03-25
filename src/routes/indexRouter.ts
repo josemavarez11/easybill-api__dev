@@ -3,6 +3,7 @@ import ExpressAdapter, {
     Request
 } from "../adapters/expressAdapter";
 import authRouter from "./authRouter";
+import personRouter from "./personRouter";
 
 const adapter = new ExpressAdapter();
 
@@ -20,6 +21,12 @@ const indexRouter = () => {
         route: '/auth',
         router: iRouter,
         callbackRouter: authRouter()
+    });
+
+    adapter.setRouter({
+        route: '/person',
+        router: iRouter,
+        callbackRouter: personRouter()
     });
 
     return iRouter;

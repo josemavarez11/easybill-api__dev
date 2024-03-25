@@ -15,10 +15,10 @@ export class Person {
     @prop({ required: true, type: String })
     fullname?: string;
 
-    @prop({ required: true, unique: true, trim: true, type: String })
+    @prop({ required: false, unique: true, trim: true, type: String })
     email?: string;
 
-    @prop({ required: false, type: String })
+    @prop({ required: true, type: String })
     address?: string;
 
     @prop({ required: true, type: String })

@@ -71,6 +71,10 @@
         "UserExist": {
             "description": "User already exists",
             "code": "3"
+        },
+        "PersonExists": {
+            "description": "Person already exists",
+            "code": "3"
         }
     }
 }
