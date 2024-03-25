@@ -1,7 +1,6 @@
 import {
     Request,
-    Response,
-    NextFunction
+    Response
 } from "../adapters/expressAdapter";
 import PersonModel from "../models/personModel";
 import UserModel from "../models/userModel";
@@ -22,47 +21,39 @@ const encrypt = new Encrypt(salt);
 
 class AuthController {
 
-    middlewareLogin = async (req: Request, res: Response, next: NextFunction) => {
+    login = async (req: Request, res: Response) => {
         const { email, password } = req.body;
 
         if (!email || !password) return res.status(400).json({ error: message.error.MissingParameters });
 
         try {
             const { user } = await UserModel.findUserByEmailOrDocument(email);
+            const { isValid } = await encrypt.compare(password, user?.password || '');
+
+            if (!user || !isValid) {
+                return res.status(400).json({
+                    error: message.error.InvalidCredentials
+                });
+            }
+
             if (!user?.status) return res.status(400).json({ error: message.error.UserNotActive });
 
-            return next();
+            const token = jwt.sign(
+                { userId: user?._id },
+                process.env.JWT_SECRET as jwt.Secret,
+                { expiresIn: '30m' }
+            );
+
+            console.log(`Se ha loguedo correctamente ${user?.person?.email}`);
+            return res.status(200).json({
+                message: message.success.LoginSuccessfull,
+                token
+            });
 
         } catch (e: any) {
-            console.error('Error al hacer la consulta', e.message);
             return res.status(500).json({ error: message.error.RequestDBError });
         }
 
-    }
-
-    login = async (req: Request, res: Response) => {
-        const { email, password } = req.body;
-
-        const { user } = await UserModel.findUserByEmailOrDocument(email);
-        const isValidPassword = await encrypt.compare(password, user?.password || '');
-
-        if (!user || !isValidPassword) {
-            return res.status(400).json({
-                error: message.error.InvalidCredentials
-            });
-        }
-
-        const token = jwt.sign(
-            { userId: user?._id },
-            process.env.JWT_SECRET as jwt.Secret,
-            { expiresIn: '10m' }
-        );
-
-        console.log(`Se ha loguedo correctamente ${user?.person?.email}`);
-        return res.status(200).json({
-            message: message.success.LoginSuccessfull,
-            token
-        });
     }
 
     //Register
