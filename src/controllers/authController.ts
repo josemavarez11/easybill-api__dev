@@ -22,7 +22,6 @@ const encrypt = new Encrypt(salt);
 
 class AuthController {
 
-    //Middleware Login
     middlewareLogin = async (req: Request, res: Response, next: NextFunction) => {
         const { email, password } = req.body;
 
@@ -41,15 +40,17 @@ class AuthController {
 
     }
 
-
     login = async (req: Request, res: Response) => {
         const { email, password } = req.body;
 
         const { user } = await UserModel.findUserByEmailOrDocument(email);
         const isValidPassword = await encrypt.compare(password, user?.password || '');
 
-        if (!user || !isValidPassword)
-            res.status(400).json({ error: message.error.InvalidCredentials });
+        if (!user || !isValidPassword) {
+            return res.status(400).json({
+                error: message.error.InvalidCredentials
+            });
+        }
 
         const token = jwt.sign(
             { userId: user?._id },
@@ -58,7 +59,10 @@ class AuthController {
         );
 
         console.log(`Se ha loguedo correctamente ${user?.person?.email}`);
-        return res.status(200).json({ token })
+        return res.status(200).json({
+            message: message.success.LoginSuccessfull,
+            token
+        });
     }
 
     //Register
@@ -92,7 +96,7 @@ class AuthController {
                 const user = await this.insertUser({ password, idPerson: person?._id.toString() })
                 if (!user) return res.status(500).json({ error: message.error.RequestDBError });
 
-                return res.status(200).json({ message: `${message.success.RegisterSuccessfull}` })
+                return res.status(200).json({ message: `${message.success.RegisterSuccessfull}` });
             }
 
             const isCashier = person?.type_person?.some((type) => type.description === TYPE_PERSON.CASHIER);

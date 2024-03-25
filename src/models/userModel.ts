@@ -53,7 +53,7 @@ export class User extends Document {
 
             return { user };
         } catch (e: any) {
-            console.error('Error al hacer la consulta', e.message);
+            console.error('Error making query', e.message);
             return { error: message.error.RequestDBError }
         }
     }

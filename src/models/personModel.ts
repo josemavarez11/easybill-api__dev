@@ -43,11 +43,10 @@ export class Person {
             return { person };
 
         } catch (e: any) {
-            console.error('Error al hacer la consulta persondocument', e.message);
+            console.error('Error making query', e.message);
             return { error: message.error.RequestDBError }
         }
     }
-
 }
 
 

@@ -4,23 +4,6 @@
 
 class BillController {
 
-
-
 }
 
 export default BillController;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
