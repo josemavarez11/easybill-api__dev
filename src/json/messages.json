@@ -75,6 +75,10 @@
         "PersonExists": {
             "description": "Person already exists",
             "code": "3"
+        },
+        "InvalidMethod": {
+            "description": "Request to the endPoint Invalid, try performing a Post",
+            "code": "3"
         }
     }
 }
