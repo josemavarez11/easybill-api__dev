@@ -17,7 +17,7 @@ const encrypt = new Encrypt(salt);
     if (!(this as User).isModified('password')) return next();
 
     const { hash } = await encrypt.encrypt((this as User).password as string);
-    console.log('Aqui middlware pre save', hash);
+
     (this as User).password = hash;
     next();
 })

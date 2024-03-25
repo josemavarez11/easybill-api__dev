@@ -1,6 +1,6 @@
-import ExpressAdapter, { Response, Request } from "../adapters/expressAdapter";
+import ExpressAdapter from "../adapters/expressAdapter";
 import AuthController from "../controllers/authController";
-import PersonModel from "../models/personModel";
+import BillModel from "../models/billModel";
 
 const adapter = new ExpressAdapter();
 
@@ -8,22 +8,18 @@ const authRouter = () => {
     const router = adapter.createRouter();
     const authController = new AuthController();
 
-    const probe = async (_req: Request, res: Response) => {
+    const prueba = async (_req: any, res: any) => {
+        const bill = await BillModel.findBillByCode(1);
 
-        const person = await PersonModel.find({})
-            .populate('type_document', 'description type -_id')
-            .populate('type_person')
-
-        console.log('Aqui prueba', person);
-
-        return res.status(200).json({ message: 'Prueba correcta' });
+        console.log(bill)
+        res.json({ bill })
     }
 
     adapter.setRouteRouter({
-        method: 'get',
+        method: 'post',
         route: '/prueba',
         router,
-        callback: [probe]
+        callback: [prueba]
     });
 
     adapter.setRouteRouter({

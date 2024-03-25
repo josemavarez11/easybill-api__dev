@@ -36,8 +36,8 @@
             "description": "Error in request to db",
             "code": "1"
         },
-        "UserExists": {
-            "description": "User already exists",
+        "InvalidParameters": {
+            "description": "Invalid parameters",
             "code": "1"
         }
     },
