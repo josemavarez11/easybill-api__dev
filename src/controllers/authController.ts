@@ -98,7 +98,7 @@ class AuthController {
 
             if (!newPerson) return res.status(500).json({ message: message.error.RequestDBError });
 
-            const newUser = await this.insertUser({ password, idPerson: newPerson._id.toString() })
+            const newUser = await this.insertUser({ password, idPerson: newPerson._id })
             if (!newUser) return res.status(500).json({ message: message.error.RequestDBError });
 
             return res.status(201).json({ message: message.success.RegisterSuccessfull });
