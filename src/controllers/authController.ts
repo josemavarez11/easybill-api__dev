@@ -32,7 +32,7 @@ class AuthController {
 
             if (!user || !isValid) {
                 return res.status(400).json({
-                    error: message.error.InvalidCredentials
+                    message: message.error.InvalidCredentials
                 });
             }
 
