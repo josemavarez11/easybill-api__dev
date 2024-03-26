@@ -25,7 +25,7 @@ class AuthController {
     login = async (req: Request, res: Response) => {
         const { email, password } = req.body;
 
-        if (!email || !password) return res.status(400).json({ error: message.error.MissingParameters });
+        if (!email || !password) return res.status(400).json({ message: message.error.MissingParameters });
 
         try {
             const { user } = await UserModel.findUserByEmailOrDocument(email);
@@ -33,11 +33,11 @@ class AuthController {
 
             if (!user || !isValid) {
                 return res.status(400).json({
-                    error: message.error.InvalidCredentials
+                    message: message.error.InvalidCredentials
                 });
             }
 
-            if (!user?.status) return res.status(400).json({ error: message.error.UserNotActive });
+            if (!user?.status) return res.status(400).json({ message: message.error.UserNotActive });
 
             const token = jwt.sign(
                 { userId: user?._id },
@@ -52,7 +52,7 @@ class AuthController {
             });
 
         } catch (e: any) {
-            return res.status(500).json({ error: message.error.RequestDBError });
+            return res.status(500).json({ message: message.error.RequestDBError });
         }
 
     }
@@ -65,7 +65,9 @@ class AuthController {
 
         try {
             const { user } = await UserModel.findUserByEmailOrDocument(email, document);
-            if (user) return res.status(400).json({ error: message.warning.UserExist });
+            if (user) return res.status(400).json({ message: message.warning.UserExist });
+
+            console.log('El usuario aun no existe');
 
             const { person } = await PersonModel.findPersonByDocument(document);
             if (!person) {
@@ -78,7 +80,7 @@ class AuthController {
                     email,
                     phoneNumber
                 })
-                if (!person) return res.status(500).json({ error: message.error.RequestDBError });
+                if (!person) return res.status(500).json({ message: message.error.RequestDBError });
 
                 const user = await this.insertUser({ password, idPerson: person?._id });
                 if (!user) return res.status(500).json({ error: message.error.RequestDBError });
@@ -87,22 +89,22 @@ class AuthController {
             }
 
             const isCashier = person?.type_person?.some((type) => type.description === TYPE_PERSON.CASHIER);
-            if (isCashier) return res.status(400).json({ error: message.warning.UserExist });
+            if (isCashier) return res.status(400).json({ message: message.warning.UserExist });
 
             const { newPerson } = await this.updatePerson({
                 idPerson: person?._id?.toString() || '',
                 typePerson: TYPE_PERSON.CASHIER
             })
 
-            if (!newPerson) return res.status(500).json({ error: message.error.RequestDBError });
+            if (!newPerson) return res.status(500).json({ message: message.error.RequestDBError });
 
-            const newUser = await this.insertUser({ password, idPerson: newPerson?._id });
-            if (!newUser) return res.status(500).json({ error: message.error.RequestDBError });
+            const newUser = await this.insertUser({ password, idPerson: newPerson._id.toString() })
+            if (!newUser) return res.status(500).json({ message: message.error.RequestDBError });
 
             return res.status(201).json({ message: message.success.RegisterSuccessfull });
         } catch (e: any) {
             console.error('Ocurrio un error en el EndPoint Register', e.message);
-            return { error: message.error.RequestDBError }
+            return { message: message.error.RequestDBError }
         }
     }
 
