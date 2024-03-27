@@ -14,6 +14,13 @@ const personRouter = () => {
         callback: [personController.createCustomer]
     });
 
+    adapter.setRouteRouter({
+        method: 'get',
+        route: '/typesDocument',
+        router,
+        callback: [personController.typeDocuments]
+    })
+
     return router;
 }
 

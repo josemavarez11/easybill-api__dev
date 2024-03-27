@@ -79,6 +79,10 @@
         "InvalidMethod": {
             "description": "Request to the endPoint Invalid, try performing a Post",
             "code": "3"
+        },
+        "NoData": {
+            "description": "No data found",
+            "code": "3"
         }
     }
 }
